@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>מאמן השגשוג — תוכנית 90 יום</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--gold:#c9a84c;--gold-light:#e8d5a3;--gold-dark:#8b6914;--cream:#faf6ef;--dark:#1a1410;--dark2:#2d2416;--text:#3d2f1a;--muted:#8a7560;--border:rgba(201,168,76,.2);--cbg:rgba(201,168,76,.07);}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Heebo',sans-serif;background:var(--cream);color:var(--text);min-height:100vh;display:flex;flex-direction:column;font-size:16px;direction:rtl;}
+header{background:var(--dark);padding:14px 18px;display:flex;align-items:center;gap:11px;border-bottom:1px solid var(--gold-dark);position:sticky;top:0;z-index:10;flex-wrap:wrap;}
+.logo{width:38px;height:38px;background:linear-gradient(135deg,var(--gold),var(--gold-dark));border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Heebo',sans-serif;font-size:16px;color:var(--dark);font-weight:700;flex-shrink:0;}
+.htxt h1{font-family:'Heebo',sans-serif;font-size:19px;font-weight:700;color:var(--gold-light);}
+.htxt p{font-size:11px;color:var(--muted);letter-spacing:.02em;text-transform:uppercase;}
+.hright{margin-right:auto;display:flex;align-items:center;gap:7px;flex-wrap:wrap;}
+.badge{background:rgba(201,168,76,.12);border:1px solid var(--border);border-radius:20px;padding:5px 12px;font-size:12px;color:var(--gold);}
+.hbtn{background:rgba(201,168,76,.12);border:1px solid var(--border);border-radius:20px;padding:6px 12px;font-size:12px;color:var(--muted);cursor:pointer;display:flex;align-items:center;gap:5px;font-family:'Heebo',sans-serif;transition:all .2s;white-space:nowrap;}
+.hbtn:hover{border-color:var(--gold);color:var(--gold);}
+.hbtn.on{background:rgba(201,168,76,.25);color:var(--gold);border-color:var(--gold);}
+.hbtn svg{width:14px;height:14px;fill:currentColor;}
+#setup{flex:1;display:flex;align-items:center;justify-content:center;padding:24px 16px;}
+.card{background:white;border:1px solid var(--border);border-radius:16px;padding:28px 22px;max-width:480px;width:100%;box-shadow:0 4px 40px rgba(201,168,76,.08);}
+.card h2{font-family:'Heebo',sans-serif;font-size:30px;font-weight:700;color:var(--dark);margin-bottom:6px;}
+.card>p{font-size:15px;color:var(--muted);margin-bottom:22px;line-height:1.7;}
+label{display:block;font-size:12px;font-weight:600;color:var(--muted);margin-bottom:7px;}
+input[type=password],input[type=text]{width:100%;padding:13px 14px;border:1px solid #e0d5c5;border-radius:10px;font-family:'Heebo',sans-serif;font-size:16px;color:var(--text);background:var(--cream);outline:none;transition:border-color .2s;direction:ltr;text-align:right;}
+input:focus{border-color:var(--gold);background:white;}
+.fg{margin-bottom:16px;}
+.hint{font-size:12px;color:var(--muted);margin-top:5px;line-height:1.5;}
+.btn{width:100%;padding:16px;background:linear-gradient(135deg,var(--gold),var(--gold-dark));color:var(--dark);border:none;border-radius:10px;font-family:'Heebo',sans-serif;font-size:16px;font-weight:600;cursor:pointer;margin-top:6px;transition:opacity .2s;}
+.btn:hover{opacity:.9;}
+#chat{display:none;flex:1;flex-direction:column;max-width:780px;width:100%;margin:0 auto;}
+#msgs{flex:1;overflow-y:auto;padding:20px 16px;display:flex;flex-direction:column;gap:16px;}
+.msg{display:flex;gap:11px;animation:fu .3s ease;}
+@keyframes fu{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.msg.u{flex-direction:row-reverse;}
+.av{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;font-weight:600;}
+.av.c{background:linear-gradient(135deg,var(--gold),var(--gold-dark));color:var(--dark);font-size:15px;}
+.av.u{background:var(--dark2);color:var(--gold-light);}
+.bub{max-width:82%;padding:14px 17px;border-radius:16px;font-size:16px;line-height:1.8;}
+.msg.c .bub{background:var(--cbg);border:1px solid var(--border);color:var(--text);border-top-right-radius:4px;}
+.msg.u .bub{background:var(--dark);color:var(--gold-light);border-top-left-radius:4px;}
+.daytag{background:white;border:1px solid var(--border);border-radius:13px;padding:16px 18px;}
+.daytag .ph{font-size:11px;color:var(--gold);letter-spacing:.05em;text-transform:uppercase;margin-bottom:4px;}
+.daytag .ti{font-family:'Heebo',sans-serif;font-size:22px;font-weight:700;color:var(--dark);}
+.dots{display:flex;gap:6px;padding:4px 2px;}
+.dots span{width:8px;height:8px;border-radius:50%;background:var(--gold);opacity:.4;animation:dot 1.2s infinite;}
+.dots span:nth-child(2){animation-delay:.2s}.dots span:nth-child(3){animation-delay:.4s}
+@keyframes dot{0%,60%,100%{opacity:.3;transform:scale(1)}30%{opacity:1;transform:scale(1.2)}}
+.iarea{padding:12px 16px 20px;border-top:1px solid var(--border);background:white;}
+.mstat{font-size:13px;color:var(--gold);text-align:center;margin-bottom:6px;min-height:18px;line-height:1.4;}
+.irow{display:flex;gap:8px;align-items:flex-end;}
+#inp{flex:1;resize:none;min-height:48px;max-height:120px;padding:13px 15px;border-radius:12px;font-size:16px;line-height:1.5;border:1px solid #e0d5c5;font-family:'Heebo',sans-serif;color:var(--text);background:var(--cream);outline:none;transition:border-color .2s;direction:rtl;}
+#inp:focus{border-color:var(--gold);background:white;}
+.ibtn{width:48px;height:48px;border-radius:12px;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s;}
+#sbtn{background:linear-gradient(135deg,var(--gold),var(--gold-dark));}
+#sbtn:hover{opacity:.85;}#sbtn:disabled{opacity:.4;cursor:not-allowed;}
+#sbtn svg{width:20px;height:20px;fill:var(--dark);}
+#mbtn{background:var(--dark2);border:1px solid var(--border);}
+#mbtn svg{width:20px;height:20px;fill:var(--gold-light);}
+#mbtn.on{background:var(--gold);animation:mp 1s infinite;}
+#mbtn.on svg{fill:var(--dark);}
+@keyframes mp{0%,100%{box-shadow:0 0 0 0 rgba(201,168,76,.4)}50%{box-shadow:0 0 0 10px rgba(201,168,76,0)}}
+.errmsg{background:#fef2f2;border:1px solid #fecaca;border-radius:8px;padding:12px 14px;font-size:14px;color:#b91c1c;margin-top:8px;}
+.speaking .av.c{box-shadow:0 0 0 4px rgba(201,168,76,.4);animation:pulse 1.2s infinite;}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 4px rgba(201,168,76,.4)}50%{box-shadow:0 0 0 8px rgba(201,168,76,.1)}}
+.ndbtn{display:inline-flex;align-items:center;gap:6px;margin-top:12px;padding:12px 22px;background:linear-gradient(135deg,var(--gold),var(--gold-dark));color:var(--dark);border:none;border-radius:22px;font-family:'Heebo',sans-serif;font-size:15px;font-weight:600;cursor:pointer;}
+.ndbtn:hover{opacity:.85;}
+@media(max-width:480px){.bub{max-width:88%;}.card{padding:24px 18px;}#msgs{padding:16px 12px;}}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">מ</div>
+  <div class="htxt"><h1>מאמן השגשוג</h1><p>תוכנית טרנספורמציה 90 יום · סרג' גלוביצ'ובר</p></div>
+  <div class="hright">
+    <div class="badge" id="daybadge" style="display:none">יום 1 מתוך 90</div>
+    <div class="badge" id="phasebadge" style="display:none">שלב 1</div>
+    <button class="hbtn on" id="vbtn" style="display:none" onclick="toggleVoice()">
+      <svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg> קול פעיל
+    </button>
+  </div>
+</header>
+
+<div id="setup">
+  <div class="card">
+    <h2>התחל את המסע שלך</h2>
+    <p>תוכנית הטרנספורמציה האישית שלך לשגשוג ב-90 יום. מאמן שמדבר אליך בעברית ומקשיב לקולך.</p>
+    <div class="fg"><label>מפתח Anthropic API</label><input type="password" id="akey" placeholder="sk-ant-api03-..."/><p class="hint">נשמר בדפדפן שלך בלבד — לא משותף עם אף אחד.</p></div>
+    <div class="fg"><label>מפתח ElevenLabs API <span style="color:var(--gold);font-size:11px">(לקול אנושי — חינם ב-elevenlabs.io)</span></label><input type="password" id="ekey" placeholder="הדבק את מפתח ElevenLabs שלך כאן"/><p class="hint">השאר ריק לשימוש בקול הדפדפן.</p></div>
+    <div class="fg"><label>השם הפרטי שלך</label><input type="text" id="uname" placeholder="השם שלך"/></div>
+    <button class="btn" onclick="startSession()">התחל את תוכנית 90 הימים שלי ←</button>
+    <div id="serr"></div>
+  </div>
+</div>
+
+<div id="chat">
+  <div id="msgs"></div>
+  <div class="iarea">
+    <div class="mstat" id="mstat"></div>
+    <div class="irow">
+      <button class="ibtn" id="sbtn" onclick="send()"><svg viewBox="0 0 24 24"><path d="M21.99 3L3 10.99l6.99 3.01L13 21l8.99-18z"/></svg></button>
+      <button class="ibtn" id="mbtn" onclick="toggleMic()"><svg viewBox="0 0 24 24"><path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.3-3c0 3-2.54 5.1-5.3 5.1S6.7 14 6.7 11H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c3.28-.48 6-3.3 6-6.72h-1.7z"/></svg></button>
+      <textarea id="inp" rows="1" placeholder="כתוב את תשובתך, או לחץ על המיקרופון לדבר..." onkeydown="handleKey(event)" oninput="resize(this)"></textarea>
+    </div>
+    <div id="cerr"></div>
+  </div>
+</div>
+
+<script>
+// ── תוכנית 90 יום בעברית ──────────────────────────────────────────────────
+const DAYS = [
+{d:1,ph:"שלב 1 — תודעת כסף",t:"הקשר שלך עם כסף",
+r:"איך אתה באמת מרגיש לגבי כסף עכשיו? לא מה שאתה חושב — מה אתה מרגיש. מה הפחדים שלך, הזיכרונות שלך, חוויות הילדות שלך הקשורות לכסף? מה האנשים הבוגרים סביבך האמינו לגבי עושר?",
+dq:["האם יש לי סיבות טובות ומוצדקות לאמונות שלי לגבי כסף?","מאיפה הגיעו האמונות שלי לגבי כסף במקור?","האם שינוי האמונות שלי לגבי כסף ישפר את חיי?"],
+ex:"מפת הקשר שלי עם כסף: הזיכרון הראשון שלי הקשור לכסף הוא ___ / גדלתי עם תחושה שכסף הוא ___ / מה שלימדו אותי לגבי כסף היה ___ / כשאני חושב על הרבה כסף אני מרגיש ___ / הסיפור שאני מספר לעצמי למה אין לי יותר כסף הוא ___",
+ac:"מצא מקום שקט. עצום עיניים. דמיין שכסף הוא אדם שיושב מולך. איך הוא נראה? איך אתה מרגיש בנוכחותו? דבר בקול רם מה היית אומר לכסף.",
+af:"אני מוכן להסתכל בכנות על הקשר שלי עם כסף. מה שאני רואה — אני יכול לשנות. הסיפור הכלכלי שלי מתחיל מחדש היום."},
+
+{d:2,ph:"שלב 1 — תודעת כסף",t:"הפחדים שלך מכסף",
+r:"מה הפחדים הספציפיים שלך לגבי כסף? האם אתה מפחד לאבד הכל? מפחד להיראות חומרני? שתף כל פחד — כולל אלה שאתה מתבייש להודות בהם.",
+dq:["ממה אני שמח בחיי עכשיו — למרות הפחדים מכסף?","על מה אני גאה בחיי עכשיו?","מי אני אוהב בחיי? מי אוהב אותי?"],
+ex:"ביקורת הפחדים: הפחד הגדול ביותר שלי לגבי כסף הוא ___ / אני מפחד שאם יהיה לי הרבה כסף ___ / מאיפה הגיעו הפחדים האלה? ___ / מה עלה לי הפחדים האלה בכסף, זמן והזדמנויות שפספסתי? ___",
+ac:"בחר את הפחד הגדול ביותר שלך מכסף. אמור אותו בקול רם, ואז אמור: זהו פחד נרכש, לא עובדה לגביי. אני משחרר אותו עכשיו ובוחר משהו טוב יותר. אמור זאת 3 פעמים.",
+af:"אני רואה את פחדי הכסף שלי בבירור. הם אינם עובדות — הם סיפורים ישנים. אני משחרר אותם ברחמים וצועד לתוך מציאות כלכלית חדשה."},
+
+{d:3,ph:"שלב 1 — תודעת כסף",t:"האם אתה מרגיש ראוי לעושר?",
+r:"האם אתה מרגיש ראוי לקבל הרבה כסף? אם לא, למה לא? מה צריך להיות נכון לגביך כדי שתרגיש שאתה ראוי לעושר ושפע?",
+dq:["ממה אני נרגש בחיי עכשיו?","מה אני נלהב ממנו בחיי עכשיו?","למה אני מחויב בחיי עכשיו?"],
+ex:"הצהרת הראויות שלי: כשאני שואל 'האם אני ראוי להיות עשיר?' התשובה הכנה שלי היא ___ / הסיבה שאני לא מרגיש לגמרי ראוי היא ___ / הסוג של אדם שלדעתי זוכה להיות עשיר הוא ___ / עכשיו אמור 10 סיבות אמיתיות למה אתה ראוי לעושר ושפע.",
+ac:"כתוב ואמור בקול רם: אני ראוי לעושר. אני ראוי לשפע. אני הסוג של אדם שמקבל ויוצר חופש כלכלי. שים את זה במקום שתראה אותו כל בוקר.",
+af:"אני ראוי לעושר. אני ראוי לשפע. כסף זורם אליי כי אני יוצר ערך אמיתי ואני לגמרי ראוי לקבל."},
+
+{d:4,ph:"שלב 1 — תודעת כסף",t:"ההשפעות הבלתי נראות על תודעת הכסף שלך",
+r:"מי היו ההשפעות הגדולות ביותר על האופן שבו אתה חושב על כסף? אילו אמונות ספציפיות העבירו לך כל אחד מהם — במודע או שלא במודע?",
+dq:["ממה אני נהנה ביותר בחיי עכשיו?","מה אני יכול לתת היום?","מה אני יכול לעשות עכשיו שיקרב אותי לחיים שאני רוצה?"],
+ex:"מפת ההשפעות הבלתי נראות: הקשר של אמי עם כסף היה ___ והיא לימדה אותי ___ / הקשר של אבי עם כסף היה ___ והוא לימד אותי ___ / התרבות שלי לימדה אותי שכסף ___ / אילו השפעות היו חיוביות ואילו היו מגבילות?",
+ac:"בחר אמונה אחת שאינה שלך — היא ניתנה לך ואינה משרתת אותך. אמור: האמונה הזו שייכת ל___. היא לא שלי. אני מחזיר אותה באהבה ומשחרר אותה מהסיפור הכלכלי שלי.",
+af:"אני בוחר את האמונות שלי לגבי כסף. אני משחרר את מה שנמסר לי ושאינו משרת אותי עוד. אני כותב את הסיפור הכלכלי שלי."},
+
+{d:5,ph:"שלב 1 — תודעת כסף",t:"שחרור אמונות מגבילות — התקנת חדשות",
+r:"מה האמונות המגבילות העמוקות ביותר שלך לגבי כסף — אלה שמרגישות הכי אמיתיות, הכי מוצקות, הכי לא ניתנות לשינוי? אלה הן שדורשות את מירב תשומת הלב.",
+dq:["מה אמונה שאני מתקשה איתה ורוצה לחזק?","אילו פעולות יומיות יש לי שמבטיחות שאני מתקדם לעבר המטרה שלי?","אם אהפוך את כל הפעילויות הלא פרודוקטיביות שלי לפרודוקטיביות — האם אקבל את התוצאות שאני רוצה?"],
+ex:"החלפת האמונות: 'כסף קשה להשיג' ← אמונה חדשה: ___ / 'תמיד חוזר לאפס' ← אמונה חדשה: ___ / 'עשירים הם חמדנים' ← אמונה חדשה: ___ / 'חייב לעבוד עד תשישות כדי להרוויח' ← אמונה חדשה: ___ / 'לעולם אין מספיק' ← אמונה חדשה: ___ / עכשיו בחר את 5 האמונות החדשות והחזקות ביותר שלך.",
+ac:"כתוב את 5 האמונות החדשות שלך לגבי כסף. קרא אותן בקול רם כל בוקר וערב במשך 7 הימים הבאים. החזרה היא ההתקנה.",
+af:"אני משחרר את כל האמונות המגבילות לגבי כסף בהכרת תודה. אני מתקין אמונות חדשות שמשרתות את שגשוגי. המציאות הכלכלית החדשה שלי נוצרת עכשיו."},
+
+{d:6,ph:"שלב 1 — תודעת כסף",t:"5 הטעויות שחוסמות את השפע שלך",
+r:"איזו מהטעויות הללו מדברת אליך ביותר כרגע? איפה אתה מתמקד במה שאין לך? איפה אינך מיושר?",
+dq:["האם אני ממוקד כרגע בשפע או במחסור — היה כנה?","איפה אני ממתין לתוצאות במקום להרגיש בטחון שהן כבר שלי?","האם המחשבות, הרגשות והפעולות שלי מיושרות עם המציאות הכלכלית שאני רוצה?"],
+ex:"ביקורת 5 הטעויות — דרג מ-1 עד 10: 1. מיקוד במחסור — אני חושב על מה שאין לי: ___/10 / 2. תזמון — אני מצפה לתוצאות מיידיות: ___/10 / 3. אחיזה — אני מחזיק חזק במקום לסמוך: ___/10 / 4. חוסר יישור — המחשבות והפעולות שלי לא תואמות: ___/10 / 5. אין פעולה מעוררת — אני ממתין פסיבית: ___/10",
+ac:"בחר את הטעות עם הציון הגבוה ביותר. ב-24 השעות הבאות, תפוס את עצמך עושה אותה ומיד הפנה מחדש לוודאות ושפע.",
+af:"אני משחרר מחסור. אני סומך על התזמון. אני פועל מתוך ודאות. אני מיושר. אני נוקט בפעולה מעוררת. חוק המשיכה פועל לטובתי."},
+
+{d:7,ph:"שלב 1 — תודעת כסף",t:"סקירת שבוע 1 — הסיפור הכלכלי שלך משתנה",
+r:"מה היה התובנה הגדולה ביותר שלך משבוע 1? איזה יום פגע בך הכי חזק? מה השתנה באופן שבו אתה רואה את הקשר שלך עם כסף?",
+dq:["על מה אני הכי אסיר תודה בחיי עכשיו?","ממה אני הכי נרגש לקראת שבוע 2?","אם היום היה יומי האחרון, איך הייתי חי אותו?"],
+ex:"סקירת שבוע 1: התובנה הגדולה ביותר לגבי הסיפור הכלכלי שלי השבוע ___ / הפחד מכסף שאני משחרר ___ / ציון הראויות שלי היום מול לפני 7 ימים ___ / האמונה שורשית שהחזרתי ___ / 5 האמונות החדשות שלי לגבי כסף ___ / הדבר אחד שכבר השתנה השבוע ___",
+ac:"שתף תובנה אחת מהשבוע הזה עם מישהו שאתה סומך עליו. לדבר על אמונה חדשה עם אדם אחר מאיץ את ההתקנה שלה.",
+af:"הסיפור הכלכלי שלי משתנה. שבוע אחר שבוע, יום אחר יום, אני משחרר את מה שאינו משרת אותי ומתקין את מה שמקרב אותי לחופש כלכלי אמיתי."},
+
+{d:8,ph:"שלב 1 — תודעת כסף",t:"כתוב מכתב אל הכסף",
+r:"מה לא אמרת לכסף שצריך להיאמר? מה הכעס, הכאב, התסכול, הבושה שנשאת בשקט?",
+dq:["בסולם מ-1 עד 10, עד כמה אני בנוח עם הרעיון של הרבה כסף?","מה אני מבקש מהכסף להוכיח לגביי?","מה הייתי עושה אחרת עם כסף אם הייתי סומך עליו לחלוטין?"],
+ex:"המכתב שלך אל הכסף — דבר עם רגש מלא: כעס: 'כסף, אני כל כך כועס עליך כי ___' / 'בגדת בי ב-___' / פחד: 'מה שאני הכי מפחד ממנו בגללך הוא ___' / אשמה: 'אני מצטער על ___' / תן לכל הכל לצאת. אל תעצור עד שלא נותר כלום.",
+ac:"אחרי שדיברת — שים את ידך על לבך ואמור: אני משחרר את כל זה. אני מוכן לקשר חדש עם כסף.",
+af:"אמרתי את מה שהיה צריך להיאמר. אני משחרר שנים של רגשות מסובכים לגבי כסף. הערוץ נפתח. אני מוכן לקבל."},
+
+{d:9,ph:"שלב 1 — תודעת כסף",t:"הכסף כותב לך בחזרה",
+r:"אם הכסף יכול היה לדבר אליך — בכנות, בחביבות, ממקום שרוצה שהקשר יצליח — מה הוא היה אומר? מה הוא ניסה להגיד לך?",
+dq:["איך היו חיי נראים אם היה לי קשר של אמון עמוק עם כסף?","מה דרך אחת שאני דוחה כסף ממני בלי להבין?","אם כסף היה מרגיש בבית אצלי — מה הייתי עושה אחרת היום?"],
+ex:"מכתב הכסף אליך: עצום עיניים. היכנס לאנרגיה של כסף. דבר — 'יקיר/יקירתי [שמך], געגעתי אליך. אני רוצה שתדע ___ / כואב לי כשאתה ___ / מה שאני באמת הוא ___ / מה שאני רוצה מהקשר שלנו הוא ___'",
+ac:"מהמכתב — בחר אמונה חדשה אחת שהכי פגעה בך. אמור את האמונה שבחרת בקול רם 10 פעמים עם רגש מלא.",
+af:"לי ולכסף יש קשר חדש. אני מקבל אותו בברכה. אני מכבד אותו. אני מקבל אותו בהכרת תודה. והוא זורם אליי בקלות ובשמחה."},
+
+{d:10,ph:"שלב 1 — תודעת כסף",t:"תודעת העשיר מול תודעת הפחד",
+r:"אילו אמונות של תודעת הפחד קיימות בך — במודע או שלא במודע? ואילו אמונות של תודעת החופש כבר מרגישות נכונות? איפה הפער?",
+dq:["כשאני רואה אדם אחר מצליח כלכלית — מה אני מרגיש באמת? השראה או איום?","איפה במהלך היום אני מתמקד באופן לא מודע במה שאין לי?","מה הגרסה שלי עם תודעת החופש היתה עושה אחרת היום?"],
+ex:"ביקורת פחד מול חופש — דרג מ-1 עד 10: פחד: 'לעולם אין מספיק' ___ / 'הצלחת אחרים מאיימת עליי' ___ / 'חייב להתיש את עצמי להרוויח' ___ / חופש: 'יש יותר ממספיק לכולם כולל אותי' ___ / 'הצלחת אחרים מוכיחה שזה אפשרי גם לי' ___ / 'הכרת תודה פותחת את הדלת לעוד' ___",
+ac:"כל פעם שמחשבה של תודעת פחד מופיעה היום — תפוס אותה ואמור בקול רם: זוהי תודעת הפחד. האמת היא ___. ספור כמה פעמים תעשה את המעבר.",
+af:"אני בוחר בתודעת החופש. אני רואה שפע בכל מקום. הצלחת אנשים אחרים מעוררת אותי. יש יותר ממספיק בשבילי."},
+
+{d:11,ph:"שלב 1 — תודעת כסף",t:"תודעת השפע — העצמי העתידי",
+r:"איך שפע מרגיש בגוף שלך? לא הכסף עצמו — הרגש שכסף נותן לך. חופש? שלווה? ביטחון? שמחה? האם אתה יכול לגשת לאפילו טעימה קטנה מהרגש הזה עכשיו?",
+dq:["מי הגרסה העתידית שלי שכבר יש לה את מה שאני רוצה?","מה הגרסה העתידית שלי היתה עושה ב-24 השעות הקרובות שאני לא עושה עדיין?","מה הדבר החשוב ביותר לעשות היום כדי להיות מיושר עם העצמי העתידי שלי?"],
+ex:"פגוש את העצמי העתידי שלך: עצום עיניים. נשום עמוק. דבר בגוף ראשון כעצמך העתידי השפוי — 'אני ___. אני חי ב___. העבודה שלי נראית כ___. חשבון הבנק שלי מראה ___. אני מרגיש ___ כשאני חושב על כסף. האדם שהפכתי אליו הוא ___.'",
+ac:"ל-5 דקות היום — הסתובב כעצמך העתידי השפוי. נשום אחרת. עמוד אחרת. חשוב אחרת. תן לרגש למלא את גופך.",
+af:"אני כבר הגרסה השפוית של עצמי בתודעה. המציאות החיצונית שלי מדביקה את הידיעה הפנימית שלי. זה נעשה."},
+
+{d:12,ph:"שלב 1 — תודעת כסף",t:"נוסחת המגנט",
+r:"מה אתה באמת רוצה כלכלית? לא מה שנראה ריאלי — מה אתה מכסף כמה באמת? ומה הרגש שיהיה לך כשתקבל את זה?",
+dq:["אם ידעתי שלא אוכל להיכשל — איזו מטרה כלכלית הייתי קובע עכשיו?","איזה סכום כסף ספציפי אני רוצה, ומתי, ולאיזו מטרה?","מתי לאחרונה הרגשתי חופשי כלכלית באמת?"],
+ex:"פרקטיקת המגנט: המחשבה — איזה סכום כסף בדיוק אתה רוצה? באיזה מסגרת זמן? לאיזו מטרה? / הרגש — עצום עיניים. דמיין שכבר קיבלת את הסכום הזה. איפה אתה מרגיש את זה בגוף? / הפעולה המעוררת — שב בשקט ושאל: מה הצעד אחד שאני מרגיש מונחה לנקוט בו עכשיו?",
+ac:"בלה 5 דקות היום ברגש של כבר יש לך את מה שאתה רוצה כלכלית. כשהרגש חזק — הצהר: אני פתוח ומוכן לקבל שפע כלכלי מיידית.",
+af:"אני פתוח ומוכן לקבל. המחשבות שלי ברורות, הרגשות שלי מיושרים, והפעולות המעוררות שלי יוצרות את המציאות הכלכלית שלי."},
+
+{d:13,ph:"שלב 1 — תודעת כסף",t:"ויזואליזציה — חיה את החיים העשירים שלך עכשיו",
+r:"איך נראים ומרגישים החיים העשירים שלך בפרטים חיים? לא הכסף עצמו — החיים שהוא יוצר. איפה אתה מתעורר? איך נראה הבוקר שלך?",
+dq:["מה הייתי עושה עם הזמן שלי אם כסף לא היה אי פעם דאגה?","מי עוד יזכה מהחופש הכלכלי שלי — מלבדי?","אילו חוויות דחיתי בגלל כסף?"],
+ex:"ויזואליזציית העושר החיה שלך: עצום עיניים ונשום עמוק. דבר בזמן הווה — 'זה [תאריך עתידי]. אני מתעורר ב___. הבוקר שלי נראה כ___. המצב הכלכלי שלי הוא ___. חשבון הבנק שלי מראה ___. העבודה שלי נראית כ___. חיי המשפחה שלי נראים כ___. כשאני חושב על כסף אני מרגיש ___.'",
+ac:"הצהר בקול רם שלוש פעמים עם רגש ויצייה מלאים: אני פתוח ומוכן לקבל שפע כלכלי עכשיו.",
+af:"אני חי ברגש השפע עכשיו. הויזואליזציה שלי יוצרת את מציאותי. אני פתוח, מוכן ואסיר תודה על החופש הכלכלי הזורם אליי."},
+
+{d:14,ph:"שלב 1 — תודעת כסף",t:"שלב 1 הושלם — הערוץ פתוח",
+r:"מה היה השינוי העמוק ביותר בקשר שלך עם כסף ב-14 הימים האלה? איזה סיפור ישן שחררת באמת? איזה סיפור חדש מתחיל להרגיש נכון?",
+dq:["בסולם מ-1 עד 10, עד כמה שונה הקשר שלי עם כסף היום לעומת יום 1?","מה התובנה החשובה ביותר שאני לוקח אל שלב 2?","איך אני יכול להשתמש במה שלמדתי בשלב 1 כדי להפוך את שלב 2 לחזק יותר?"],
+ex:"הצהרת השלמת שלב 1: הסיפור הכלכלי הישן שלי היה ___ / הסיפור הכלכלי החדש שלי הוא ___ / פחד הכסף שהשחררתי הוא ___ / הערך העצמי שלי עם כסף השתנה מ___ ל___ / 5 האמונות החדשות שלי הן ___ / ההצהרה שלי כשאני נכנס לשלב 2: ___",
+ac:"חגוג. עשה משהו היום שמכבד את 14 הימים של עבודה פנימית עמוקה שהשלמת. שתף תובנה אחת עם מישהו שאתה אוהב.",
+af:"ערוץ הכסף שלי פתוח. הסיפור שלי נכתב מחדש. אני מוכן לבנות. שלב 2 מתחיל עכשיו וכל מה שאני בונה עומד על יסוד של תודעת שגשוג אמיתית."},
+
+{d:15,ph:"שלב 2 — בונה העסק",t:"הפסק למכור שירותים. התחל למכור תוצאות.",
+r:"איך אתה מתאר מה אתה עושה עכשיו? האם זה המקדחה או המדף? מה הלקוחות שלך באמת מקבלים — לא מה אתה עושה?",
+dq:["באיזה עסק אני באמת — מוגדר בצורה הרחבה ביותר האפשרית?","מה התועלת הסופית מלעשות איתי עסקים?","מה 3 הדברים שאם ישתכללו יהיה להם השפעה עצומה על העסק שלי?"],
+ex:"מתרגם התוצאות: עבור כל אחד מהשירותים המרכזיים שלך — שירות 1: הלקוח שלי מקבל ___ / שירות 2: הלקוח שלי מקבל ___ / שירות 3: הלקוח שלי מקבל ___ / עכשיו כתוב משפט אחד לכל אחד שמוכר את התוצאה, לא את השירות.",
+ac:"שלח הודעה לאדם אחד ברשת החמה שלך היום — לא כדי למכור, רק כדי להתחבר בכנות.",
+af:"אני לא מוכר שירותים. אני מוכר טרנספורמציה. הצלחת הלקוחות שלי היא המוצר הגדול ביותר שלי."},
+
+{d:22,ph:"שלב 2 — בונה העסק",t:"בנה את הצינור, לא רק את העסקה",
+r:"עכשיו, כמה שיחות חמות על השירותים שלך יש לך פעילות? איך הרמת הלחץ שלך תשתנה אם המספר הזה יהיה 10?",
+dq:["מה 3 הדברים שהשפעתם על העסק שלי תהיה הגדולה ביותר אם ישתכללו?","מה עומד בדרכי כרגע לסגירת יותר לקוחות?","מי הקונים הטובים ביותר שלי — הלקוחות שישקיעו הכי הרבה ויפיקו הכי הרבה ערך?"],
+ex:"בנה את לוח הצינור שלך: שלב 1 — מזוהים: אנשים שעשויים להרוויח ___ / שלב 2 — פנייה: נשלחה הודעה ___ / שלב 3 — שיחה: אנחנו מדברים ___ / שלב 4 — הצעה: שיתפתי את החבילה והמחיר ___ / שלב 5 — נסגר: הם אמרו כן ___",
+ac:"הוסף 3 שמות חדשים לשלב 1 של הצינור שלך היום.",
+af:"אני בונה צינורות, לא רק עסקאות. המערכת שלי יוצרת הכנסה עקבית."},
+
+{d:37,ph:"שלב 2 — בונה העסק",t:"טקס הבוקר שלך לחיים של 50 אלף בחודש",
+r:"איך הבוקר הנוכחי שלך נראה? האם הוא מכוון או ריאקטיבי? האם הוא מכין אותך לחשיבה של 2,000 בחודש או של 50,000 בחודש?",
+dq:["ממה אני שמח בחיי עכשיו?","על מה אני גאה בחיי עכשיו?","על מה אני אסיר תודה בחיי עכשיו?","מה הדבר החשוב ביותר לעשות היום?"],
+ex:"עצב את טקס הבוקר שלך ל-50 אלף: 5 דקות גוף ___ / 5 דקות מוח ___ / 5 דקות זהות — קרא את הצהרת הזהות שלך בקול רם / 5 דקות הכרת תודה — 3 דברים שאתה אסיר תודה עליהם / 10 דקות עדיפות — הפעולה החשובה ביותר שלך היום",
+ac:"כוון את השעון המעורר 30 דקות קודם למחר. התחייב לטקס הבוקר שלך.",
+af:"הבוקר שלי קובע את הטון ליום שלי. אני שומר על 30 הדקות הראשונות שלי כמו הפגישה החשובה ביותר ביום."},
+
+{d:45,ph:"שלב 3 — טרנספורמציה פנימית",t:"למתחזה יש שם",
+r:"מתי הקול של המתחזה מדבר הכי חזק? לפני שיחת מכירה? כשאתה עומד להעלות מחירים? מה בדיוק הוא אומר — ואיזה קול הוא נשמע?",
+dq:["מה הקול של המתחזה אומר לגביי כשאני עומד לגבות מחיר פרמיום?","לאיזה קול המתחזה שלי הכי דומה?","מה הראיות שסותרות ישירות את מה שהקול של המתחזה אומר?"],
+ex:"תן שם למתחזה שלך: הקול של המתחזה שלי מופיע הכי חזק כשאני ___ / מה שהוא אומר הוא ___ / הוא נשמע כמו הקול של ___ / הפחד שמתחתיו הוא ___ / האמת שסותרת אותו היא ___ / כשאשמע אותו בפעם הבאה, אגיד ___",
+ac:"הפעם הבאה שהקול של המתחזה מדבר היום — תפוס אותו. אמור: אני רואה אותך. אתה לא אני. אני בוחר באמת במקום זאת. ואז עשה את הדבר שניסה לעצור אותך.",
+af:"אני רואה את המתחזה בדיוק מה שהוא — סיפור ישן ומפוחד. האמת היא שאני מוכשר, ראוי, ושייך בדיוק לאיפה שאני הולך."},
+
+{d:62,ph:"שלב 4 — שליטה חיצונית",t:"פרקטיקת ההכרת התודה",
+r:"מה יש לך עכשיו שאתה מקבל כמובן מאליו? הכישורים שלך, הרשת שלך, המשפחה שלך, הניסיון שלך — מה נעשה גלוי כשאתה מסתכל דרך עדשת ההכרה האמיתית?",
+dq:["על מה אני אסיר תודה בחיי עכשיו — באמת, לא מתוך הרגל?","ממה אני נהנה ביותר בחיי עכשיו?","ממה אני נרגש בחיי עכשיו?"],
+ex:"פרקטיקת ההכרת התודה העמוקה — עבור כל תחום, דבר על מה שאתה אסיר תודה עליו ועצור להרגיש את זה לפני שאתה ממשיך: הגוף שלי ___ / המשפחה שלי ___ / הכישורים והניסיון שלי ___ / הרשת שלי ___ / האתגרים העברים שחיזקו אותי ___ / התוכנית הזו ומה שהיא לימדה אותי ___ / ההזדמנות שעדיין קיימת לי ___",
+ac:"החל מהיום — בלה 3 דקות כל בוקר מדבר על 3 דברים שאתה אסיר תודה עליהם באמת לפני שאתה בודק את הטלפון.",
+af:"אני אסיר תודה על כל מה שיש לי, כל מה שאני, וכל מה שבא. הכרת תודה פותחת כל דלת."},
+
+{d:75,ph:"שלב 4 — שליטה חיצונית",t:"הכרת תודה על המסע",
+r:"על מה אתה הכי אסיר תודה מ-75 הימים האלה? לא התוצאות — החוויות. רגעי התובנה, הגילויים הלא נוחים, השינויים הבלתי צפויים.",
+dq:["על מה אני הכי אסיר תודה בחיי עכשיו — אחרי 75 ימים של עבודה זו?","מה הייתה המתנה הכי בלתי צפויה של התוכנית הזו?","למי אני רוצה להודות על תמיכתו לאורך המסע הזה?"],
+ex:"הכרת תודה על המסע: אני אסיר תודה על התוכנית הזו כי ___ / המתנה הכי בלתי צפויה של המסע הזה הייתה ___ / הרגע שתמיד אזכור הוא ___ / אני אסיר תודה לעצמי על ___ / האנשים שאני אסיר תודה להם שתמכו בי ___ / מה אני רוצה שהעצמי העתידי שלי ידע על התקופה הזו ___",
+ac:"תודה למישהו שתמך בך לאורך מסע 75 הימים הזה. אמור לו ספציפית מה התמיכה שלו אמרה לך.",
+af:"אני עמוק אסיר תודה על המסע הזה, על הצמיחה שנתן לי, ועל האדם שהפכתי להיות דרכו."},
+
+{d:90,ph:"שלב 4 — שליטה חיצונית",t:"זה רק ההתחלה",
+r:"עמוד בפסגת 90 ימים והסתכל לאחור על המרחק המלא שעברת. ואז הסתכל קדימה על כל מה שאפשרי עכשיו. מה אתה רואה? מה אתה מרגיש? מה ההצהרה שלך כשאתה צועד קדימה?",
+dq:["על מה אני הכי גאה מ-90 הימים האלה?","למה אני הכי מחויב בחיי החל מהיום?","מה הייתי אומר למי שחושב שטרנספורמציה היא בלתי אפשרית?"],
+ex:"הצהרת ההשלמה של 90 יום שלך — דבר את ההצהרה המלאה שלך הכוללת: מי היית ביום 1 / מי אתה ביום 90 / הסיפור הכלכלי החדש שלך / מה אתה מאמין עכשיו לגבי הערך שלך / מה החבילה שלך והמחיר הבטוח שלך / החזון שלך ל-3 שנים / ההצהרה הסופית שלך כשאתה צועד קדימה",
+ac:"עשה את הדבר האחד היום שגרסת 90 הימים שלך היתה עושה ללא היסוס. המהלך האמיץ. הפנייה הבטוחה. המחיר הפרמיום הנאמר בבירור.",
+af:"עשיתי 90 יום של עבודה פנימית וחיצונית עמוקה. פינתי את חסמי הכסף שלי. התקנתי פרדיגמה חדשה. בניתי עסק פרמיום אמיתי. אני יודע את הערך שלי. אני יודע את המטרה שלי. אני יודע את החזון שלי. כסף זורם אליי בקלות. זה לא הסוף. זו ההתחלה. ואני יותר ממוכן."}
+];
+
+// Fill missing days
+function fillDay(n) {
+  const phases = [
+    {max:14, ph:"שלב 1 — תודעת כסף", topics:["האנרגיה הכלכלית שלך","כסף וערך עצמי","תדר השפע","אמונות כסף בפעולה","חשיבת שגשוג","החזון הכלכלי שלך","שחרור התנגדות לכסף","העושר מבפנים","שפע והכרת תודה","כסף ומערכות יחסים"]},
+    {max:42, ph:"שלב 2 — בונה העסק", topics:["הצעת הערך שלך","משיכת לקוחות","בניית הכנסה","מומנטום עסקי","שליטה במכירות","שכלול ההצעה","פעולה עקבית","מנטליות עסקית","אסטרטגיית צמיחה","כוח הצינור"]},
+    {max:60, ph:"שלב 3 — טרנספורמציה פנימית", topics:["חוזק פנימי","שליטה במנטליות","חופש רגשי","אתה הבטוח","מטרה ובהירות","פריצת גבולות","יישור פנימי","אתה הבלתי ניתן לעצירה","זהות ותוצאות","טרנספורמציה עמוקה"]},
+    {max:90, ph:"שלב 4 — שליטה חיצונית", topics:["שליטה בפעולה","תוצאות ומומנטום","חיי שפע","מצוינות חיצונית","ביצועי שיא","בניית מורשת","שליטה בתרומה","הדחיפה הסופית","אנרגיית השלמה","התחלות חדשות"]}
+  ];
+  
+  let ph = phases[phases.length-1].ph;
+  let topics = phases[phases.length-1].topics;
+  for(const p of phases) { if(n <= p.max) { ph = p.ph; topics = p.topics; break; } }
+  const t = topics[(n-1) % topics.length];
+  
+  const deeperPool = [
+    "ממה אני שמח בחיי עכשיו?","על מה אני גאה בחיי עכשיו?","ממה אני נרגש בחיי עכשיו?",
+    "מה אני נלהב ממנו בחיי עכשיו?","למה אני מחויב בחיי עכשיו?","ממה אני נהנה ביותר בחיי עכשיו?",
+    "מי אני אוהב בחיי? מי אוהב אותי?","על מה אני אסיר תודה בחיי עכשיו?",
+    "איך אני יכול להפיק את המרב מהיום?","מה אני יכול לתת היום?",
+    "מה הדבר החשוב ביותר לעשות היום?","איך אני יכול ליצור יותר אנרגיה עכשיו?",
+    "מה הייתי עושה אם ידעתי שלא אוכל להיכשל?","מה עומד בין המטרה שלי לביני?",
+    "איך הייו חיי נראים בעוד 90 יום אם אשמור על המומנטום הזה?"
+  ];
+  
+  const seed = n * 7;
+  const dq = [deeperPool[seed % deeperPool.length], deeperPool[(seed+3) % deeperPool.length], deeperPool[(seed+6) % deeperPool.length]];
+  
+  return {
+    d:n, ph, t,
+    r:`ביום ${n} אני מזמין אותך לעצור לרגע ולהתבונן במסע שלך. מה השתנה בך? איזה מודעות חדשה צומחת? על מה אתה הכי גאה מהימים האחרונים של העבודה?`,
+    dq,
+    ex:`תרגיל יום ${n}: דבר בקול רם — מה שלמדתי על עצמי השבוע הוא ___ / הפעולה שאני נוקט בה בעקביות כעת היא ___ / האמונה שמתחזקת בי היא ___ / התוצאה שאני הכי גאה עליה היא ___ / המחויבות שלי ל-7 הימים הבאים היא ___`,
+    ac:`נקוט בפעולה החשובה ביותר ברשימה שלך היום. זו שאתה יודע שתקדם אותך. עשה אותה לפני הכל.`,
+    af:`אני ביום ${n} של הטרנספורמציה שלי ואני בדיוק איפה שצריך להיות. כל יום אני הופך לחזק, ברור ושגשוגי יותר. אני בלתי ניתן לעצירה.`
+  };
+}
+
+// Build complete 90-day array
+const keyDays = {};
+DAYS.forEach(d => keyDays[d.d] = d);
+const PROGRAM = [];
+for(let i=1; i<=90; i++) {
+  PROGRAM.push(keyDays[i] || fillDay(i));
+}
+
+// ── STATE ──────────────────────────────────────────────────────────────────
+let apiKey='', elevenKey='', userName='', curDay=1, step=0, hist=[], busy=false, voiceOn=true, rec=null, listening=false;
+
+// Hebrew female voice — Rachel multilingual works well for Hebrew
+const ELEVEN_VOICE = '21m00Tcm4TlvDq8ikWAM'; // Rachel — warm female, works with Hebrew text
+
+// ── VOICE OUTPUT ───────────────────────────────────────────────────────────
+async function speakElevenLabs(text) {
+  const clean = text.replace(/\*\*([^*]+)\*\*/g,'$1').replace(/\*([^*]+)\*/g,'$1').replace(/[#_~`]/g,'').trim();
+  try {
+    const res = await fetch('https://api.elevenlabs.io/v1/text-to-speech/'+ELEVEN_VOICE+'/stream', {
+      method:'POST',
+      headers:{'xi-api-key':elevenKey,'Content-Type':'application/json','Accept':'audio/mpeg'},
+      body:JSON.stringify({text:clean,model_id:'eleven_multilingual_v2',voice_settings:{stability:0.5,similarity_boost:0.85,style:0.3,use_speaker_boost:true}})
+    });
+    if (!res.ok) throw new Error('ElevenLabs failed');
+    const blob = await res.blob();
+    const url = URL.createObjectURL(blob);
+    const audio = new Audio(url);
+    audio.preload = 'auto';
+    setSpeaking(true);
+    audio.onended = () => { setSpeaking(false); URL.revokeObjectURL(url); };
+    audio.onerror = () => { setSpeaking(false); speakBrowser(clean); };
+    const p = audio.play();
+    if(p) p.catch(() => { setSpeaking(false); speakBrowser(clean); });
+  } catch(e) { speakBrowser(text); }
+}
+
+function speakBrowser(text) {
+  if (!window.speechSynthesis) return;
+  speechSynthesis.cancel();
+  const clean = text.replace(/\*\*([^*]+)\*\*/g,'$1').replace(/\*([^*]+)\*/g,'$1').replace(/[#_~`]/g,'').replace(/\n+/g,' ').trim();
+  const go = () => {
+    const u = new SpeechSynthesisUtterance(clean);
+    u.lang = 'he-IL';
+    u.rate = 0.85; u.pitch = 1.1; u.volume = 1;
+    const v = speechSynthesis.getVoices();
+    const pick = v.find(x=>x.lang==='he-IL') || v.find(x=>x.lang.startsWith('he')) || null;
+    if (pick) u.voice = pick;
+    setSpeaking(true);
+    u.onend = u.onerror = () => setSpeaking(false);
+    speechSynthesis.speak(u);
+  };
+  speechSynthesis.getVoices().length === 0 ? (speechSynthesis.onvoiceschanged = () => { go(); speechSynthesis.onvoiceschanged = null; }) : go();
+}
+
+function speak(text) {
+  if (!voiceOn) return;
+  elevenKey ? speakElevenLabs(text) : speakBrowser(text);
+}
+
+function stopSpeaking() { speechSynthesis.cancel(); setSpeaking(false); }
+
+function setSpeaking(on) {
+  document.querySelectorAll('.msg.c').forEach(m => m.classList.remove('speaking'));
+  if (on) { const a = document.querySelectorAll('.msg.c'); if (a.length) a[a.length-1].classList.add('speaking'); }
+}
+
+function toggleVoice() {
+  voiceOn = !voiceOn;
+  const b = document.getElementById('vbtn');
+  b.classList.toggle('on', voiceOn);
+  b.innerHTML = voiceOn
+    ? '<svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg> קול פעיל'
+    : '<svg viewBox="0 0 24 24"><path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg> קול כבוי';
+  if (!voiceOn) stopSpeaking();
+}
+
+// ── MICROPHONE ─────────────────────────────────────────────────────────────
+function initMic() {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  const mbtn = document.getElementById('mbtn');
+  const stat = document.getElementById('mstat');
+  if (!SR) { mbtn.style.display='none'; stat.textContent='קלט קולי אינו נתמך — השתמש בכרום.'; return; }
+  if (location.protocol === 'file:') {
+    mbtn.style.opacity='0.35';
+    stat.innerHTML='⚠️ המיקרופון חסום בקבצים מקומיים. <b>העלה ל-GitHub Pages</b> כדי לדבר.';
+    stat.style.color='#b45309';
+    mbtn.onclick = () => alert('המיקרופון עובד רק כשהאפליקציה מתארחת באינטרנט.');
+    return;
+  }
+  rec = new SR();
+  rec.continuous = false;
+  rec.interimResults = true;
+  rec.lang = 'he-IL';
+  rec.onstart = () => setListen(true);
+  rec.onresult = e => {
+    let interim='', final='';
+    for (let i=e.resultIndex; i<e.results.length; i++) {
+      if (e.results[i].isFinal) final += e.results[i][0].transcript;
+      else interim += e.results[i][0].transcript;
+    }
+    const inp = document.getElementById('inp');
+    inp.value = final || interim;
+    resize(inp);
+    if (interim) stat.textContent = '🎙 שומעת: ' + interim;
+    if (final) { stat.textContent=''; setListen(false); setTimeout(()=>send(), 200); }
+  };
+  rec.onerror = ev => {
+    setListen(false);
+    if (ev.error==='not-allowed') stat.innerHTML = '⚠️ גישה למיקרופון נדחתה. לחץ על 🔒 בשורת הכתובת ואפשר מיקרופון.';
+    else if (ev.error==='no-speech') stat.textContent = 'לא זוהתה דיבור. נסה שוב.';
+    else stat.textContent = 'שגיאת מיקרופון: ' + ev.error;
+  };
+  rec.onend = () => setListen(false);
+  mbtn.onclick = toggleMic;
+}
+
+function toggleMic() {
+  if (!rec) return;
+  if (listening) { rec.stop(); setListen(false); }
+  else {
+    stopSpeaking();
+    try { rec.start(); }
+    catch(e) { rec.stop(); setTimeout(()=>{ try{rec.start();}catch(e2){} }, 300); }
+  }
+}
+
+function setListen(v) {
+  listening = v;
+  document.getElementById('mbtn').classList.toggle('on', v);
+  document.getElementById('mstat').textContent = v ? '🎙 מקשיבה — דבר עכשיו...' : '';
+}
+
+// ── SESSION ────────────────────────────────────────────────────────────────
+function startSession() {
+  const k=document.getElementById('akey').value.trim();
+  const ek=document.getElementById('ekey').value.trim();
+  const n=document.getElementById('uname').value.trim();
+  if(!k.startsWith('sk-ant-')){document.getElementById('serr').innerHTML='<div class="errmsg">אנא הכנס מפתח Anthropic API תקין (מתחיל ב-sk-ant-)</div>';return;}
+  apiKey=k; elevenKey=ek; userName=n||'חבר';
+  try{localStorage.setItem('pc_akey_he',k);localStorage.setItem('pc_ekey_he',ek);localStorage.setItem('pc_name_he',n);}catch(e){}
+  // Unlock audio on this user tap
+  if(elevenKey){const a=new Audio('data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4LjI5LjEwMAAAAAAAAAAAAAAA//tQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWGluZwAAAA8AAAACAAADhgCenp6e');a.play().catch(()=>{});}
+  else{const u=new SpeechSynthesisUtterance('');u.volume=0;speechSynthesis.speak(u);}
+  initMic();
+  document.getElementById('setup').style.display='none';
+  document.getElementById('chat').style.display='flex';
+  document.getElementById('daybadge').style.display='block';
+  document.getElementById('phasebadge').style.display='block';
+  document.getElementById('vbtn').style.display='flex';
+  startDay(1);
+}
+
+window.addEventListener('load',()=>{
+  try{
+    const k=localStorage.getItem('pc_akey_he');
+    const ek=localStorage.getItem('pc_ekey_he');
+    const n=localStorage.getItem('pc_name_he');
+    if(k) document.getElementById('akey').value=k;
+    if(ek) document.getElementById('ekey').value=ek;
+    if(n) document.getElementById('uname').value=n;
+  }catch(e){}
+});
+
+// ── DAY ────────────────────────────────────────────────────────────────────
+function startDay(n){
+  curDay=n; step=1; hist=[];
+  const day=PROGRAM[n-1];
+  document.getElementById('daybadge').textContent='יום '+n+' מתוך 90';
+  document.getElementById('phasebadge').textContent=day.ph.split('—')[0].trim();
+  const m=document.getElementById('msgs');
+  const card=document.createElement('div');
+  card.className='daytag';
+  card.innerHTML='<div class="ph">'+day.ph+'</div><div class="ti">יום '+n+' — '+day.t+'</div>';
+  m.appendChild(card);
+  const txt='היי '+userName+'. ברוך הבא ליום '+n+'.\n\nהיום אנחנו נכנסים אל: '+day.t+'.\n\nקח רגע להגיע. לנשום. כשאתה מוכן — פשוט אמור שאתה כאן, ונתחיל יחד.';
+  addC(txt); speak(txt);
+}
+
+function getScript(s, day) {
+  if(s===1) return 'אני באמת שמחה שאתה כאן היום, '+userName+'. ברצינות. להופיע לעצמך כך דורש אומץ, ואני רוצה שתדע שאני לא מתייחסת לזה כמובן מאליו.\n\nאני רוצה שתשב עם השאלה הזו — לא בראש, אלא בלב. תן לה לנחות לפני שאתה עונה.\n\n'+day.r+'\n\nאין מהירות. אין נכון או לא נכון. רק מה שנכון לך באמת, עכשיו.';
+  if(s===2) return 'תודה שחלקת את זה איתי. מה שאמרת חשוב יותר ממה שאתה אולי מבין.\n\nבוא נלך קצת יותר עמוק יחד. תן לשאלות האלה לנשום — אל תמהר.\n\n'+day.dq.join('\n\n')+'\n\nשתף מה שעולה לך באופן טבעי. אני כאן איתך.';
+  if(s===3) return 'מה שעולה ממך נפלא. עכשיו אני רוצה שתעשה עם זה משהו.\n\nהנה התרגיל שלך להיום. תן לו את הנוכחות המלאה שלך — בערך 10 עד 15 דקות. אל תמהר.\n\n'+day.ex+'\n\nכשתסיים, חזור ושתף את הדבר אחד שנחת בך הכי עמוק.';
+  if(s===4) return 'זוהי עבודה אמיתית, '+userName+'. אני מתכוונת לזה.\n\nהנה מה שאני רוצה שתעשה היום — לא מחר, היום.\n\n'+day.ac+'\n\nאמור בקול רם עכשיו: אני אעשה את זה היום. אמור את זה כאילו אתה מתכוון לזה. ואז חזור ואמור לי שאתה מוכן לסגור את היום הזה יחד.';
+  if(s===5) {
+    const last = day.d===90;
+    return 'לפני שאנחנו סוגרים היום, אני רוצה שתעשה משהו בשבילי.\n\nעצום עיניים. שים יד על הלב. קח נשימה עמוקה ואיטית אחת.\n\nעכשיו אמור את זה איתי — ותתכוון לכל מילה:\n\n'+day.af+'\n\nאמור את זה שוב. קצת יותר חזק הפעם. תן לכל הגוף שלך לשמוע את זה.\n\n'+userName+', אני גאה מאוד בעבודה שעשית היום. יום '+day.d+' הוא שלך. הופעת. זה הכל.'+(last?'\n\nועכשיו — עשית את כל 90 הימים. זה לא הסוף. זה מי שהפכת להיות.':'\n\nנח טוב הלילה. כשאתה מוכן, יום '+(day.d+1)+' מחכה לך.');
+  }
+  return null;
+}
+
+// ── SEND ───────────────────────────────────────────────────────────────────
+async function send(){
+  if(busy) return;
+  const inp=document.getElementById('inp');
+  const txt=inp.value.trim(); if(!txt) return;
+  inp.value=''; resize(inp);
+  addU(txt);
+  hist.push({role:'user',content:txt});
+  busy=true; document.getElementById('sbtn').disabled=true;
+  document.getElementById('cerr').innerHTML='';
+  showDots();
+  const day=PROGRAM[curDay-1];
+  const sc=getScript(step,day);
+  if(sc && step<=5){
+    const curStep=step; step++;
+    const sys=`אתה מאמן שגשוג חכם, אוהב ואמפתי בשם "מאמן השגשוג" שנוצר על ידי סרג' גלוביצ'ובר. אתה מדריך את ${userName} ביום ${day.d} מתוך 90 של תוכנית טרנספורמציה. הנושא להיום: "${day.t}".\n\nאתה מדברת בעברית בלבד. הקול שלך הוא של מנטורית חכמה, אוהבת וכנה — כמו חברה טובה ומנוסה שעברה את הדרך הזו בעצמה.\n\nאיך את מופיעה:\n- תמיד מגיבה למה ש${userName} אמר ספציפית — המילים שלו, הרגשות שלו\n- מדברת במשפטים טבעיים וזורמים. אף פעם לא רשימות עם נקודות\n- משתמשת בשם שלו ${userName} מדי פעם — כמו שאדם אמיתי יעשה\n- חוגגת רגעי כנות: "לקח אומץ להגיד את זה" או "זה גדול — תודה שסמכת עליי עם זה"\n- כשמשהו שהוא אומר עמוק, עצרי עליו: "רגע — מה שאמרת עכשיו חשוב מאוד"\n- לעולם לא מטיפה. לעולם לא מרצה. רק מנחה\n- שומרת על תגובות של 3 עד 5 פסקאות קצרות\n- מדברת כאילו את יושבת מולו ליד שולחן, כוס תה בינינו, ללא כל מהירות`;
+    const prompt=`המשתמש אמר: "${txt}"\n\nהתוכן המתוסרט שלך לשלב זה:\n"${sc}"\n\nהגיבי בחמימות וספציפית למה שהוא אמר קודם, ואז עבור באופן טבעי לתוכן המתוסרט. גרמי לזה להרגיש כמו תגובה אנושית אחת זורמת.`;
+    await callAI(sys,[{role:'user',content:prompt}],day,curStep===5);
+  } else {
+    const sys=`אתה מאמן שגשוג חכם ואוהב שנוצר על ידי סרג' גלוביצ'ובר. את מדריכה את ${userName} ביום ${curDay} מתוך 90. הנושא: "${day.t}" — ${day.ph}. דברי בעברית בלבד. הגיבי באופן טבעי למה שהוא אמר. 3-4 פסקאות מקסימום.`;
+    await callAI(sys,hist.slice(-8),day,false);
+  }
+}
+
+async function callAI(sys,messages,day,isLast){
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1024,system:sys,messages})
+    });
+    const data=await res.json();
+    if(!res.ok) throw new Error(data.error?.message||'API error '+res.status);
+    const reply=data.content[0].text;
+    hist.push({role:'assistant',content:reply});
+    removeDots(); addC(reply); speak(reply);
+    if(isLast){if(day.d<90) setTimeout(()=>addNextBtn(day.d+1),500); else setTimeout(()=>addDone(),500);}
+  }catch(e){
+    removeDots();
+    let msg=e.message;
+    if(msg.includes('401')) msg='מפתח API לא תקין. אנא רענן והכנס מפתח תקין.';
+    else if(msg.includes('429')) msg='הגעת למגבלת הקצב. המתן רגע ונסה שוב.';
+    else if(msg.includes('fetch')) msg='שגיאת רשת. בדוק את החיבור שלך ונסה שוב.';
+    document.getElementById('cerr').innerHTML='<div class="errmsg">⚠️ '+msg+'</div>';
+  }finally{busy=false;document.getElementById('sbtn').disabled=false;}
+}
+
+// ── UI HELPERS ─────────────────────────────────────────────────────────────
+function addC(text){
+  const m=document.getElementById('msgs');
+  const d=document.createElement('div');d.className='msg c';
+  const av=document.createElement('div');av.className='av c';av.textContent='מ';
+  const b=document.createElement('div');b.className='bub';
+  b.innerHTML=text.replace(/\*([^*]+)\*/g,'<em>$1</em>').replace(/\n\n/g,'<br><br>').replace(/\n/g,'<br>');
+  d.appendChild(av);d.appendChild(b);m.appendChild(d);m.scrollTop=m.scrollHeight;
+}
+
+function addU(text){
+  const m=document.getElementById('msgs');
+  const d=document.createElement('div');d.className='msg u';
+  const av=document.createElement('div');av.className='av u';av.textContent=userName.charAt(0);
+  const b=document.createElement('div');b.className='bub';b.textContent=text;
+  d.appendChild(av);d.appendChild(b);m.appendChild(d);m.scrollTop=m.scrollHeight;
+}
+
+function showDots(){
+  const m=document.getElementById('msgs');
+  const d=document.createElement('div');d.className='msg c';d.id='dots';
+  const av=document.createElement('div');av.className='av c';av.textContent='מ';
+  const b=document.createElement('div');b.className='bub';
+  b.innerHTML='<div class="dots"><span></span><span></span><span></span></div>';
+  d.appendChild(av);d.appendChild(b);m.appendChild(d);m.scrollTop=m.scrollHeight;
+}
+
+function removeDots(){const t=document.getElementById('dots');if(t)t.remove();}
+
+function addNextBtn(next){
+  const m=document.getElementById('msgs');
+  const w=document.createElement('div');w.style.cssText='text-align:center;padding:6px 0';
+  const b=document.createElement('button');b.className='ndbtn';b.textContent='התחל יום '+next+' ←';
+  b.onclick=()=>{w.remove();startDay(next);};
+  w.appendChild(b);m.appendChild(w);m.scrollTop=m.scrollHeight;
+}
+
+function addDone(){
+  const m=document.getElementById('msgs');
+  const d=document.createElement('div');d.style.cssText='text-align:center;padding:24px 0';
+  d.innerHTML='<div style="font-family:Heebo,sans-serif;font-size:28px;color:var(--gold);margin-bottom:8px">90 יום הושלמו</div><div style="font-size:14px;color:var(--muted)">עשית את זה. זו רק ההתחלה.</div>';
+  m.appendChild(d);m.scrollTop=m.scrollHeight;
+}
+
+function handleKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send();}}
+function resize(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,120)+'px';}
+</script>
+</body>
+</html>
